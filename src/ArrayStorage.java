@@ -13,17 +13,17 @@ public class ArrayStorage {
 
     void save(Resume r) {
         int size = size();
-        boolean isIncluded = false;
+        boolean isExists = false;
 
         for(int i = 0; i < size; i++) {
             if(storage[i].uuid.equals(r.uuid)) {
                 System.out.println("Резюме с таким УИД уже существует");
-                isIncluded = true;
+                isExists = true;
                 break;
             }
         }
 
-        if(!isIncluded) {
+        if(!isExists) {
             storage[size] =r;
         }
     }
@@ -43,9 +43,9 @@ public class ArrayStorage {
         for(int i = 0; i < size; i++) {
             if(storage[i].uuid.equals(uuid)) {
                 Arrays.fill(storage, i, i + 1, null);
-                for(int y = i + 1; y < size; y++) {
-                        storage[y - 1] = storage[y];
-                        storage[y] = null;
+                for(int j = i + 1; j < size; j++) {
+                        storage[j - 1] = storage[j];
+                        storage[j] = null;
                 }
                 break;
             }
