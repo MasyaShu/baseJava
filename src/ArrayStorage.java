@@ -7,71 +7,57 @@ public class ArrayStorage {
     Resume[] storage = new Resume[10000];
 
     void clear() {
-        for(int i = 0; i < 10000; i++) {
-            if(storage[i] == null) {
-                Arrays.fill(storage, 0, i + 1, null);
-                break;
-            }
-        }
+        int size = size();
+        Arrays.fill(storage, 0, size + 1, null);
     }
 
     void save(Resume r) {
-        for(int i = 0; i < 10000; i++) {
-            if(storage[i] == null) {
-                storage[i] = r;
-                break;
-            } else if(storage[i].uuid.equals(r.uuid)) {
+        int size = size();
+        boolean isIncluded = false;
+
+        for(int i = 0; i < size; i++) {
+            if(storage[i].uuid.equals(r.uuid)) {
                 System.out.println("Резюме с таким УИД уже существует");
+                isIncluded = true;
                 break;
             }
+        }
+
+        if(!isIncluded) {
+            storage[size] =r;
         }
     }
 
     Resume get(String uuid) {
-        for(Resume r : storage) {
-            if(r == null) {
-                return null;
-            } else {
-                if(uuid.equals(r.uuid)) {
-                    return r;
-                }
+        int size = size();
+        for(int i = 0; i < size; i++) {
+            if(uuid.equals(storage[i].uuid)) {
+                return storage[i];
             }
         }
         return null;
     }
 
     void delete(String uuid) {
-        for(int i = 0; i < 10000; i++) {
-            if(storage[i] == null) {
-                break;
-            } else {
-                if(storage[i].uuid.equals(uuid)) {
-                    Arrays.fill(storage, i, i + 1, null);
-                    for(int y = i + 1; y < 10000; y++) {
-                        if(storage[y] == null) {
-                            break;
-                        } else {
-                            storage[y - 1] = storage[y];
-                            storage[y] = null;
-                        }
-                    }
-                    break;
+        int size = size();
+        for(int i = 0; i < size; i++) {
+            if(storage[i].uuid.equals(uuid)) {
+                Arrays.fill(storage, i, i + 1, null);
+                for(int y = i + 1; y < size; y++) {
+                        storage[y - 1] = storage[y];
+                        storage[y] = null;
                 }
+                break;
             }
         }
-        //Arrays.sort(storage);
     }
 
     /**
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        for(int i = 0; i < 10000; i++) {
-            if(storage[i] == null) {
-                return Arrays.copyOf(storage, i);
-            }
-        }
-        return Arrays.copyOf(storage, 9999);
+        int size = size();
+        return Arrays.copyOf(storage, size);
     }
 
     int size() {
