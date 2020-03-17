@@ -5,14 +5,14 @@ import java.util.Arrays;
  */
 public class ArrayStorage {
     Resume[] storage = new Resume[10000];
+    private int size;
 
     void clear() {
-        int size = size();
         Arrays.fill(storage, 0, size + 1, null);
+        size = 0;
     }
 
     void save(Resume r) {
-        int size = size();
         boolean isExists = false;
 
         for(int i = 0; i < size; i++) {
@@ -25,11 +25,11 @@ public class ArrayStorage {
 
         if(!isExists) {
             storage[size] = r;
+            size++;
         }
     }
 
     Resume get(String uuid) {
-        int size = size();
         for(int i = 0; i < size; i++) {
             if(uuid.equals(storage[i].uuid)) {
                 return storage[i];
@@ -39,14 +39,12 @@ public class ArrayStorage {
     }
 
     void delete(String uuid) {
-        int size = size();
         for(int i = 0; i < size; i++) {
             if(storage[i].uuid.equals(uuid)) {
-                Arrays.fill(storage, i, i + 1, null);
-                for(int j = i + 1; j < size; j++) {
+                for(int j = i + 1; j <= size; j++) {
                         storage[j - 1] = storage[j];
-                        storage[j] = null;
                 }
+                size--;
                 break;
             }
         }
@@ -61,11 +59,6 @@ public class ArrayStorage {
     }
 
     int size() {
-        for(int i = 0; i < 10000; i++) {
-            if(storage[i] == null) {
-                return i;
-            }
-        }
-        return 0;
+        return size;
     }
 }
