@@ -24,7 +24,7 @@ public class ArrayStorage {
         }
 
         if(!isExists) {
-            storage[size] =r;
+            storage[size] = r;
         }
     }
 
