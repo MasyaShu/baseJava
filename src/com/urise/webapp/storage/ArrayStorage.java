@@ -8,76 +8,64 @@ import java.util.Arrays;
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    private Resume[] storage = new Resume[10000];
+    private Resume[] storage = new Resume[10_000];
     private int size;
 
     public void clear() {
-        Arrays.fill(storage, 0, size + 1, null);
+        Arrays.fill(storage, 0, size, null);
         size = 0;
     }
 
-    public void save(Resume r) {
-        if(isPresent(r.getUuid())) {
+    public void save(Resume resume) {
+        if(getPositionResume(resume.getUuid()) != 0) {
             System.out.println("Резюме с таким УИД уже существует");
         } else {
-            storage[size] = r;
+            storage[size] = resume;
             size++;
         }
     }
 
-    public void update(Resume r) {
-        if(!isPresent(r.getUuid())) {
+    public void update(Resume resume) {
+        if(getPositionResume(resume.getUuid()) == 0) {
             System.out.println("Резюме с таким УИД нет");
         } else {
-            storage[getIndexResume(r.getUuid())] = r;
+            storage[getPositionResume(resume.getUuid()) -1] = resume;
         }
     }
 
     public Resume get(String uuid) {
-        if(isPresent(uuid)) {
-            return storage[getIndexResume(uuid)];
+        int i = getPositionResume(uuid);
+        if(i != 0) {
+            return storage[i];
         }
-        else {
-            System.out.println("Резюме с таким УИД нет");
-            return null;
-        }
+        System.out.println("Резюме с таким УИД нет");
+        return null;
     }
 
     public void delete(String uuid) {
-       if(isPresent(uuid)) {
-           for(int i = getIndexResume(uuid) + 1; i <= size; i++) {
-               storage[i - 1] = storage[i];
-           }
+       int i = getPositionResume(uuid);
+       if(i != 0) {
+           System.arraycopy(storage, i, storage, i - 1, size - i);
            size--;
        } else {
            System.out.println("Резюме с таким УИД нет");
        }
     }
 
-    private boolean isPresent(String uuid) {
-        for(int i = 0; i < size; i++) {
-            if(storage[i].getUuid().equals(uuid)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private int getIndexResume(String uuid) {
+     private int getPositionResume(String uuid) {
         int i;
         for(i = 0; i < size; i++) {
             if(uuid.equals(storage[i].getUuid())) {
-                break;
+                return i + 1;
             }
         }
-        return i;
+        return 0;
     }
 
     /**
      * @return array, contains only Resumes in storage (without null)
      */
     public Resume[] getAll() {
-        int size = size();
         return Arrays.copyOf(storage, size);
     }
 
