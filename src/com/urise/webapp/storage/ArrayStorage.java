@@ -45,7 +45,7 @@ public class ArrayStorage {
     public void delete(String uuid) {
        int i = getPositionResume(uuid);
        if(i != 0) {
-           System.arraycopy(storage, i, storage, i - 1, size - i);
+           System.arraycopy(storage, i, storage, i - 1, size);
            size--;
        } else {
            System.out.println("Резюме с таким УИД нет");
