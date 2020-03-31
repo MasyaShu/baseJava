@@ -8,15 +8,8 @@ import com.urise.webapp.model.Resume;
 public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
-    public void save(Resume resume) {
-        if(size == storage.length) {
-            System.out.println("База переполнена, запись не возможна>");
-        } else if(getIndex(resume.getUuid()) >= 0) {
-            System.out.println("Резюме с УИД " + resume.getUuid() + " уже есть в базе");
-        } else {
-            storage[size] = resume;
-            size++;
-        }
+    public void saveResume(Resume resume, int index) {
+        storage[size] = resume;
     }
 
     @Override
@@ -27,5 +20,10 @@ public class ArrayStorage extends AbstractArrayStorage {
             }
         }
         return -1;
+    }
+
+    @Override
+    public void deleteResume(int index) {
+        storage[index] = storage[size - 1];
     }
 }
