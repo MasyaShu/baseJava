@@ -13,11 +13,11 @@ public abstract class AbstractArrayStorage implements Storage {
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
 
-    public abstract int getIndex(String uuid);
+    abstract int getIndex(String uuid);
 
-    public abstract void saveResume(Resume resume, int index);
+    abstract void saveResume(Resume resume, int index);
 
-    public abstract void deleteResume(int index);
+    abstract void deleteResume(int index);
 
     public void save(Resume resume) {
         int index = getIndex(resume.getUuid());

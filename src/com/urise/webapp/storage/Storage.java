@@ -2,11 +2,7 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.model.Resume;
 
-import java.util.Arrays;
-
 public interface Storage {
-
-    int getIndex(String uuid);
 
     void save(Resume resume);
 
