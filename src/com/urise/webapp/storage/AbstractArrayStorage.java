@@ -7,26 +7,21 @@ import com.urise.webapp.model.Resume;
 
 import java.util.Arrays;
 
-public abstract class AbstractArrayStorage implements Storage {
+public abstract class AbstractArrayStorage extends AbstractStorage implements Storage {
     protected static final int STORAGE_LIMIT = 10_000;
 
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
 
-    abstract int getIndex(String uuid);
-
-    abstract void saveResume(Resume resume, int index);
+    abstract void saveResume(Resume resume);
 
     abstract void deleteResume(int index);
 
-    public void save(Resume resume) {
-        int index = getIndex(resume.getUuid());
+    public void runSave(Resume resume) {
         if (size == storage.length) {
             throw new StorageException("База переполнена, запись не возможна", resume.getUuid());
-        } else if (index >= 0) {
-            throw new ExistStorageException(resume.getUuid());
         } else {
-            saveResume(resume, index);
+            saveResume(resume);
             size++;
         }
     }
@@ -40,38 +35,27 @@ public abstract class AbstractArrayStorage implements Storage {
         return size;
     }
 
-    public void update(Resume resume) {
-        int index = getIndex(resume.getUuid());
-        if (index < 0) {
-            throw new NotExistStorageException(resume.getUuid());
-        } else {
-            storage[index] = resume;
-        }
+
+    public void runUpdate(int index, Resume resume) {
+        storage[index] = resume;
     }
 
-    public Resume get(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
-        }
+    public Resume runGet(int index) {
         return storage[index];
     }
 
-    public void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (index >= 0) {
-            storage[index] = null;
-            if (size != index + 1) {
-                deleteResume(index);
-                storage[size - 1] = null;
-            }
-            size--;
-        } else {
-            throw new NotExistStorageException(uuid);
+    public void runDelete(int index) {
+        storage[index] = null;
+        if (size != index + 1) {
+            deleteResume(index);
+            storage[size - 1] = null;
         }
+        size--;
     }
 
     public Resume[] getAll() {
         return Arrays.copyOf(storage, size);
     }
+
+
 }
