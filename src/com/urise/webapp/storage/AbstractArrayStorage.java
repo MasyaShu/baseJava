@@ -11,15 +11,15 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
 
-    abstract void saveResume(Resume resume);
+    abstract void saveResume(Resume resume, int index);
 
     abstract void deleteResume(int index);
 
-    public void runSave(Resume resume) {
+    public void runSave(Resume resume, int index) {
         if (size == storage.length) {
             throw new StorageException("База переполнена, запись не возможна", resume.getUuid());
         } else {
-            saveResume(resume);
+            saveResume(resume, index);
             size++;
         }
     }

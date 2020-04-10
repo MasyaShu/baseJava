@@ -8,7 +8,7 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract int getIndex(String uuid);
 
-    protected abstract void runSave(Resume resume);
+    protected abstract void runSave(Resume resume, int index);
 
     protected abstract Resume runGet(int index);
 
@@ -17,40 +17,46 @@ public abstract class AbstractStorage implements Storage {
     protected abstract void runDelete(int index);
 
     public void save(Resume resume) {
-        if (isNotExist(resume.getUuid())) {
-            runSave(resume);
+        int index = indexNotExist(resume.getUuid());
+        if (index < 0) {
+            runSave(resume, index);
         }
     }
 
     public void update(Resume resume) {
-        if(isExist(resume.getUuid())) {
-            runUpdate(getIndex(resume.getUuid()), resume);
+        int index = indexExist(resume.getUuid());
+        if (index >= 0) {
+            runUpdate(index, resume);
         }
     }
 
     public Resume get(String uuid) {
-        if(isExist(uuid)) {
-            return runGet(getIndex(uuid));
+        int index = indexExist(uuid);
+        if (index >= 0) {
+            return runGet(index);
         }
         return null;
     }
 
     public void delete(String uuid) {
-        if(isExist(uuid)) {
-            runDelete(getIndex(uuid));
+        int index = indexExist(uuid);
+        if (index >= 0) {
+            runDelete(index);
         }
     }
 
-    private boolean isNotExist(String uuid) {
-        if (getIndex(uuid) < 0) {
-            return true;
+    private int indexNotExist(String uuid) {
+        int index = getIndex(uuid);
+        if (index < 0) {
+            return index;
         }
         throw new ExistStorageException(uuid);
     }
 
-    private boolean isExist(String uuid) {
-        if (getIndex(uuid) >= 0) {
-            return true;
+    private int indexExist(String uuid) {
+        int index = getIndex(uuid);
+        if (index >= 0) {
+            return index;
         }
         throw new NotExistStorageException(uuid);
     }
