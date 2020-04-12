@@ -38,11 +38,11 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         storage[index] = resume;
     }
 
-    public Resume runGet(int index) {
+    public Resume runGet(int index, String uuid) {
         return storage[index];
     }
 
-    public void runDelete(int index) {
+    public void runDelete(int index, String uuid) {
         storage[index] = null;
         if (size != index + 1) {
             deleteResume(index);

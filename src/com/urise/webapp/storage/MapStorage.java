@@ -2,13 +2,13 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.model.Resume;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
-public class ListStorage extends AbstractStorage {
-    private ArrayList<Resume> storage = new ArrayList<>();
+public class MapStorage extends AbstractStorage {
+    private HashMap<String, Resume> storage = new HashMap<>();
 
     public void runSave(Resume resume, int index) {
-        storage.add(resume);
+        storage.put(resume.getUuid(), resume);
     }
 
     public void clear() {
@@ -20,26 +20,24 @@ public class ListStorage extends AbstractStorage {
     }
 
     public void runUpdate(int index, Resume resume) {
-        storage.set(index, resume);
+        storage.replace(resume.getUuid(), resume);
     }
 
     public Resume runGet(int index, String uuid) {
-        return storage.get(index);
+        return storage.get(uuid);
     }
 
     public void runDelete(int index, String uuid) {
-        storage.remove(index);
+        storage.remove(uuid);
     }
 
     public Resume[] getAll() {
-        return storage.toArray(new Resume[storage.size()]);
+        return storage.values().toArray(new Resume[storage.size()]);
     }
 
     protected int getIndex(String uuid) {
-        for (int i = 0; i < storage.size(); i++) {
-            if (storage.get(i).getUuid().equals(uuid)) {
-                return i;
-            }
+        if(storage.containsKey(uuid)) {
+            return 0;
         }
         return -1;
     }
