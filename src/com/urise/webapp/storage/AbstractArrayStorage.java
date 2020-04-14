@@ -11,7 +11,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
 
-    abstract void saveResume(Resume resume, Integer index);
+    abstract void saveResume(Resume resume, Integer key);
 
     abstract void deleteResume(int index);
 
@@ -34,8 +34,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
 
-    public void runUpdate(Object index, Resume resume) {
-        storage[(Integer) index] = resume;
+    public void runUpdate(Object key, Resume resume) {
+        storage[(Integer) key] = resume;
     }
 
     public Resume runGet(Object key) {
@@ -54,10 +54,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     public boolean isExist(Object key) {
-        if ((Integer) key < 0) {
-            return false;
-        }
-        return true;
+        return (Integer) key >= 0;
     }
 
     public Resume[] getAll() {

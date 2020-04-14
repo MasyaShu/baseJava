@@ -19,8 +19,8 @@ public class ListStorage extends AbstractStorage {
         return storage.size();
     }
 
-    public void runUpdate(Object index, Resume resume) {
-        storage.set((Integer) index, resume);
+    public void runUpdate(Object key, Resume resume) {
+        storage.set((Integer) key, resume);
     }
 
     public Resume runGet(Object key) {
@@ -32,10 +32,7 @@ public class ListStorage extends AbstractStorage {
     }
 
     public boolean isExist(Object key) {
-        if ((Integer) key < 0) {
-            return false;
-        }
-        return true;
+        return (Integer) key >= 0;
     }
 
     public Resume[] getAll() {
@@ -43,7 +40,7 @@ public class ListStorage extends AbstractStorage {
     }
 
     protected Integer searchKey(String uuid) {
-        for (Integer i = 0; i < storage.size(); i++) {
+        for (int i = 0; i < storage.size(); i++) {
             if (storage.get(i).getUuid().equals(uuid)) {
                 return i;
             }

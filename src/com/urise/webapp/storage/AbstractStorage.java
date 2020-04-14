@@ -8,54 +8,60 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract Object searchKey(String uuid);
 
-    protected abstract void runSave(Resume resume, Object Key);
+    protected abstract void runSave(Resume resume, Object key);
 
-    protected abstract Resume runGet(Object index);
+    protected abstract Resume runGet(Object key);
 
-    protected abstract void runUpdate(Object index, Resume resume);
+    protected abstract void runUpdate(Object key, Resume resume);
 
-    protected abstract void runDelete(Object index);
+    protected abstract void runDelete(Object key);
 
     protected abstract boolean isExist(Object key);
 
     public void save(Resume resume) {
-        Object key = searchKey(resume.getUuid());
-        if (keyNotExist(key, resume.getUuid())) {
-            runSave(resume, key);
-        }
+        Object key = KeyNotExist(resume.getUuid());
+        runSave(resume, key);
     }
 
     public void update(Resume resume) {
-        Object key = searchKey(resume.getUuid());
-        if (keyExist(key, resume.getUuid())) {
-            runUpdate(key, resume);
-        }
+        Object key = KeyExist(resume.getUuid());
+        runUpdate(key, resume);
     }
 
     public Resume get(String uuid) {
+        Object key = KeyExist(uuid);
+        return runGet(key);
+    }
+
+    public void delete(String uuid) {
+        Object key = KeyExist(uuid);
+        runDelete(key);
+    }
+
+    private Object KeyExist(String uuid) {
         Object key = searchKey(uuid);
-        if (keyExist(key, uuid)) {
-            return runGet(key);
+        if (isKeyExist(key, uuid)) {
+            return key;
         }
         return null;
     }
 
-    public void delete(String uuid) {
+    private Object KeyNotExist(String uuid) {
         Object key = searchKey(uuid);
-        if (keyExist(key, uuid)) {
-            runDelete(key);
+        if (isKeyNotExist(key, uuid)) {
+            return key;
         }
-
+        return null;
     }
 
-    private boolean keyNotExist(Object key, String uuid) {
+    private boolean isKeyNotExist(Object key, String uuid) {
         if (!isExist(key)) {
             return true;
         }
         throw new ExistStorageException(uuid);
     }
 
-    private boolean keyExist(Object key, String uuid) {
+    private boolean isKeyExist(Object key, String uuid) {
         if (isExist(key)) {
             return true;
         }
