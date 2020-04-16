@@ -2,12 +2,9 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.model.Resume;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class MapStorage extends AbstractStorage {
+public class MapResumeStorage extends AbstractStorage {
     private Map<String, Resume> storage = new HashMap<>();
 
     public void runSave(Resume resume, Object key) {
@@ -23,7 +20,7 @@ public class MapStorage extends AbstractStorage {
     }
 
     public void runUpdate(Object key, Resume resume) {
-        storage.replace((String) key, resume);
+        storage.replace(((Resume) key).getUuid(), resume);
     }
 
     protected boolean isExist(Object key) {
@@ -31,21 +28,18 @@ public class MapStorage extends AbstractStorage {
     }
 
     public Resume runGet(Object key) {
-        return storage.get((String) key);
+        return storage.get(((Resume) key).getUuid());
     }
 
     public void runDelete(Object key) {
-        storage.remove((String) key);
+        storage.remove(((Resume) key).getUuid());
     }
 
     public List<Resume> runGetAll() {
         return new ArrayList<Resume>(storage.values());
     }
 
-    protected String searchKey(String uuid) {
-        if (storage.containsKey(uuid)) {
-            return uuid;
-        }
-        return null;
+    public Resume searchKey(String uuid) {
+            return storage.get(uuid);
     }
 }
