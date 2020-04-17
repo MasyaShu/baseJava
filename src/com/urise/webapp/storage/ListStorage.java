@@ -8,8 +8,37 @@ import java.util.List;
 public class ListStorage extends AbstractStorage {
     private ArrayList<Resume> storage = new ArrayList<>();
 
+    protected Integer searchKey(String uuid) {
+        for (int i = 0; i < storage.size(); i++) {
+            if (storage.get(i).getUuid().equals(uuid)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     public void runSave(Resume resume, Object key) {
         storage.add(resume);
+    }
+
+    public Resume runGet(Object key) {
+        return storage.get((Integer) key);
+    }
+
+    public void runUpdate(Object key, Resume resume) {
+        storage.set((Integer) key, resume);
+    }
+
+    public void runDelete(Object key) {
+        storage.remove(((Integer) key).intValue());
+    }
+
+    public List<Resume> runGetAll() {
+        return storage;
+    }
+
+    public boolean isExist(Object key) {
+        return (Integer) key >= 0;
     }
 
     public void clear() {
@@ -18,34 +47,5 @@ public class ListStorage extends AbstractStorage {
 
     public int size() {
         return storage.size();
-    }
-
-    public void runUpdate(Object key, Resume resume) {
-        storage.set((Integer) key, resume);
-    }
-
-    public Resume runGet(Object key) {
-        return storage.get((Integer) key);
-    }
-
-    public void runDelete(Object key) {
-        storage.remove(((Integer) key).intValue());
-    }
-
-    public boolean isExist(Object key) {
-        return (Integer) key >= 0;
-    }
-
-    public List<Resume> runGetAll() {
-        return storage;
-    }
-
-    protected Integer searchKey(String uuid) {
-        for (int i = 0; i < storage.size(); i++) {
-            if (storage.get(i).getUuid().equals(uuid)) {
-                return i;
-            }
-        }
-        return -1;
     }
 }

@@ -46,7 +46,7 @@ public class MainArray {
                     printAll();
                     break;
                 case "save":
-                    r = new Resume(uuid, fullName);
+                    r = new Resume(uuid);
                     ARRAY_STORAGE.save(r);
                     printAll();
                     break;
