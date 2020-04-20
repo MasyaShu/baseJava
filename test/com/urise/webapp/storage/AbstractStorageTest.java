@@ -22,7 +22,6 @@ public class AbstractStorageTest {
     private Resume r1 = new Resume(uuid1, "Ivan Sh");
     private Resume r2 = new Resume(uuid2, "Mariia Sh");
     private Resume r3 = new Resume(uuid3, "Max Sh");
-   // private Resume r4 = new Resume(uuid3, "Shu Sh");
     private Resume r4 = new Resume(uuid4, "Shu Sh");
 
 
