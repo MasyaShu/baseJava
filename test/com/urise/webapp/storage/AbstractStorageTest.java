@@ -98,7 +98,7 @@ public class AbstractStorageTest {
         List<Resume> all = storage.getAllSorted();
         List<Resume> actualResumes = Arrays.asList(r1, r2, r3);
         assertStorageSize(3);
-        Assert.assertEquals(all, actualResumes);
+        Assert.assertEquals(actualResumes, all);
     }
 
     private void assertStorageSize(int i) {

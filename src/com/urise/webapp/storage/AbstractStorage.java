@@ -6,63 +6,73 @@ import com.urise.webapp.model.Resume;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Logger;
 
-public abstract class AbstractStorage implements Storage {
+public abstract class AbstractStorage<SK> implements Storage {
 
-    protected abstract Object searchKey(String uuid);
+    private static final Logger LOG = Logger.getLogger(AbstractStorage.class.getName());
 
-    protected abstract void runSave(Resume resume, Object key);
+    protected abstract SK searchKey(String uuid);
 
-    protected abstract Resume runGet(Object key);
+    protected abstract void runSave(Resume resume, SK key);
 
-    protected abstract void runUpdate(Object key, Resume resume);
+    protected abstract Resume runGet(SK key);
 
-    protected abstract void runDelete(Object key);
+    protected abstract void runUpdate(SK key, Resume resume);
+
+    protected abstract void runDelete(SK key);
 
     protected abstract List<Resume> runGetAll();
 
-    protected abstract boolean isExist(Object key);
+    protected abstract boolean isExist(SK key);
 
     public void save(Resume resume) {
-        Object key = KeyNotExist(resume.getUuid());
+        LOG.info("Save " + resume);
+        SK key = KeyNotExist(resume.getUuid());
         runSave(resume, key);
     }
 
     public void update(Resume resume) {
-        Object key = KeyExist(resume.getUuid());
+        LOG.info("Update " + resume);
+        SK key = KeyExist(resume.getUuid());
         runUpdate(key, resume);
     }
 
     public Resume get(String uuid) {
-        Object key = KeyExist(uuid);
+        LOG.info("Get " + uuid);
+        SK key = KeyExist(uuid);
         return runGet(key);
     }
 
     public void delete(String uuid) {
-        Object key = KeyExist(uuid);
+        LOG.info("Delete " + uuid);
+        SK key = KeyExist(uuid);
         runDelete(key);
     }
 
     @Override
     public List<Resume> getAllSorted() {
+        LOG.info("Get all sorted" );
         List<Resume> allStorage = runGetAll();
         Collections.sort(allStorage);
         return allStorage;
     }
 
-    private Object KeyExist(String uuid) {
-        Object key = searchKey(uuid);
+    private SK KeyExist(String uuid) {
+        SK key = searchKey(uuid);
         if (isExist(key)) {
             return key;
         }
+        LOG.warning("Resume " + uuid + " not exist");
         throw new NotExistStorageException(uuid);
     }
 
-    private Object KeyNotExist(String uuid) {
-        Object key = searchKey(uuid);
+    private SK KeyNotExist(String uuid) {
+        SK key = searchKey(uuid);
         if (!isExist(key)) {
             return key;
         }
+        LOG.warning("Resume " + uuid + " already exist");
         throw new ExistStorageException(uuid);
     }
 }
