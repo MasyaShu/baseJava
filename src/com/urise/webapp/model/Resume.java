@@ -46,6 +46,14 @@ public class Resume implements Comparable<Resume> {
         return fullName;
     }
 
+    public Map<ContactType, String> getContact() {
+        return contact;
+    }
+
+    public Map<SectionType, Section> getSections() {
+        return sections;
+    }
+
     public void setUuid(String uuid) {
         this.uuid = uuid;
     }
@@ -65,12 +73,14 @@ public class Resume implements Comparable<Resume> {
         if (o == null || getClass() != o.getClass()) return false;
         Resume resume = (Resume) o;
         return uuid.equals(resume.uuid) &&
-                fullName.equals(resume.fullName);
+                fullName.equals(resume.fullName) &&
+                Objects.equals(contact, resume.contact) &&
+                Objects.equals(sections, resume.sections);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid, fullName);
+        return Objects.hash(uuid, fullName, contact, sections);
     }
 
     @Override
@@ -78,6 +88,8 @@ public class Resume implements Comparable<Resume> {
         return "Resume{" +
                 "uuid='" + uuid + '\'' +
                 ", fullName='" + fullName + '\'' +
+                ", contact=" + contact +
+                ", sections=" + sections +
                 '}';
     }
 }

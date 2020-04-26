@@ -16,7 +16,7 @@ public class MapResumeStorage extends AbstractStorage<Resume> {
     }
 
     public Resume runGet(Resume key) {
-        return storage.get(key.getUuid());
+        return key;
     }
 
     public void runUpdate(Resume key, Resume resume) {
