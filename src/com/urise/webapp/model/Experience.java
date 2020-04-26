@@ -2,18 +2,18 @@ package com.urise.webapp.model;
 
 import java.time.YearMonth;
 
-public class EduSection {
+public class Experience {
     YearMonth data;
     YearMonth dataTo;
     String establishment;
-    String http;
+    String url;
     String position;
 
-    public EduSection(YearMonth data, YearMonth dataTo, String establishment, String http,String position) {
+    public Experience(YearMonth data, YearMonth dataTo, String establishment, String http, String position) {
         this.data = data;
         this.dataTo = dataTo;
         this.establishment = establishment;
-        this.http = http;
+        this.url = http;
         this.position = position;
     }
 
@@ -33,7 +33,7 @@ public class EduSection {
         return position;
     }
 
-    public String getHttp() {
-        return http;
+    public String getUrl() {
+        return url;
     }
 }

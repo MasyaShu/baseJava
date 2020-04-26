@@ -12,7 +12,7 @@ public class Resume implements Comparable<Resume> {
     private String uuid;
     private String fullName;
     private Map<ContactType, String> contact;
-    private Map<SectionType, Section> sections;
+    private Map<SectionType, AbstractSection> sections;
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
@@ -25,11 +25,11 @@ public class Resume implements Comparable<Resume> {
         this.fullName = fullName;
     }
 
-    public Resume(String fullName, Map<ContactType, String> contact, Map<SectionType, Section> sections) {
+    public Resume(String fullName, Map<ContactType, String> contact, Map<SectionType, AbstractSection> sections) {
         this(UUID.randomUUID().toString(), fullName, contact, sections);
     }
 
-    public Resume(String uuid, String fullName, Map<ContactType, String> contact, Map<SectionType, Section> sections) {
+    public Resume(String uuid, String fullName, Map<ContactType, String> contact, Map<SectionType, AbstractSection> sections) {
         Objects.requireNonNull(uuid, "uuid must not be null");
         Objects.requireNonNull(fullName, "fullName must not be null");
         this.uuid = uuid;
@@ -50,7 +50,7 @@ public class Resume implements Comparable<Resume> {
         return contact;
     }
 
-    public Map<SectionType, Section> getSections() {
+    public Map<SectionType, AbstractSection> getSections() {
         return sections;
     }
 

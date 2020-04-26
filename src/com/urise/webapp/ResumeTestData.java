@@ -35,7 +35,7 @@ public class ResumeTestData {
                     contacts.put(c, "http://gkislin.ru/");
             }
         }
-        Map<SectionType, Section> sections = new HashMap<>();
+        Map<SectionType, AbstractSection> sections = new HashMap<>();
         for (SectionType st : SectionType.values()) {
             if (st.name().equals("PERSONAL") || st.name().equals("OBJECTIVE")) {
                 switch (st.name()) {
@@ -64,18 +64,18 @@ public class ResumeTestData {
             } else if (st.name().equals("EXPERIENCE") || st.name().equals("EDUCATION")) {
                 switch (st.name()) {
                     case "EXPERIENCE":
-                        List<EduSection> experience = new ArrayList<>();
-                        experience.add(new EduSection(YearMonth.of(2013, 10), null, "Java Online Projects", "http://javaops.ru/", "Автор проекта. Создание, организация и проведение Java онлайн проектов и стажировок."));
-                        experience.add(new EduSection(YearMonth.of(2014, 10), YearMonth.of(2016, 1), "Wrike", "", "Старший разработчик (backend). Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO."));
-                        experience.add(new EduSection(YearMonth.of(2012, 4), YearMonth.of(2014, 10), "RIT Center", "", "Java архитектор. Организация процесса разработки системы ERP для разных окружений: релизная политика, версионирование, ведение CI (Jenkins), миграция базы (кастомизация Flyway), конфигурирование системы (pgBoucer, Nginx), AAA via SSO. Архитектура БД и серверной части системы. Разработка интергационных сервисов: CMIS, BPMN2, 1C (WebServices), сервисов общего назначения (почта, экспорт в pdf, doc, html). Интеграция Alfresco JLAN для online редактирование из браузера документов MS Office. Maven + plugin development, Ant, Apache Commons, Spring security, Spring MVC, Tomcat,WSO2, xcmis, OpenCmis, Bonita, Python scripting, Unix shell remote scripting via ssh tunnels, PL/Python"));
-                        sections.put(st, new ListObjectSection(experience));
+                        List<Experience> experience = new ArrayList<>();
+                        experience.add(new Experience(YearMonth.of(2013, 10), null, "Java Online Projects", "http://javaops.ru/", "Автор проекта. Создание, организация и проведение Java онлайн проектов и стажировок."));
+                        experience.add(new Experience(YearMonth.of(2014, 10), YearMonth.of(2016, 1), "Wrike", "", "Старший разработчик (backend). Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO."));
+                        experience.add(new Experience(YearMonth.of(2012, 4), YearMonth.of(2014, 10), "RIT Center", "", "Java архитектор. Организация процесса разработки системы ERP для разных окружений: релизная политика, версионирование, ведение CI (Jenkins), миграция базы (кастомизация Flyway), конфигурирование системы (pgBoucer, Nginx), AAA via SSO. Архитектура БД и серверной части системы. Разработка интергационных сервисов: CMIS, BPMN2, 1C (WebServices), сервисов общего назначения (почта, экспорт в pdf, doc, html). Интеграция Alfresco JLAN для online редактирование из браузера документов MS Office. Maven + plugin development, Ant, Apache Commons, Spring security, Spring MVC, Tomcat,WSO2, xcmis, OpenCmis, Bonita, Python scripting, Unix shell remote scripting via ssh tunnels, PL/Python"));
+                        sections.put(st, new OrganizationSection(experience));
                         break;
                     case "EDUCATION":
-                        List<EduSection> education = new ArrayList<>();
-                        education.add(new EduSection(YearMonth.of(2013, 3), YearMonth.of(2013, 5), "Coursera", "https://www.coursera.org/course/progfun", "Functional Programming Principles in Scala\" by Martin Odersky"));
-                        education.add(new EduSection(YearMonth.of(2011, 3), YearMonth.of(2011, 4), "Wrike", "", "Курс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\""));
-                        education.add(new EduSection(YearMonth.of(2005, 4), YearMonth.of(2005, 10), "Siemens AG", "", "3 месяца обучения мобильным IN сетям (Берлин)"));
-                        sections.put(st, new ListObjectSection(education));
+                        List<Experience> education = new ArrayList<>();
+                        education.add(new Experience(YearMonth.of(2013, 3), YearMonth.of(2013, 5), "Coursera", "https://www.coursera.org/course/progfun", "Functional Programming Principles in Scala\" by Martin Odersky"));
+                        education.add(new Experience(YearMonth.of(2011, 3), YearMonth.of(2011, 4), "Wrike", "", "Курс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\""));
+                        education.add(new Experience(YearMonth.of(2005, 4), YearMonth.of(2005, 10), "Siemens AG", "", "3 месяца обучения мобильным IN сетям (Берлин)"));
+                        sections.put(st, new OrganizationSection(education));
                 }
             }
         }
@@ -93,7 +93,7 @@ public class ResumeTestData {
 
         for (SectionType st : SectionType.values()) {
             System.out.println(st.getTitle());
-            Section section = resume.getSections().get(st);
+            AbstractSection section = resume.getSections().get(st);
             if (st.name().equals("PERSONAL") || st.name().equals("OBJECTIVE")) {
                 System.out.println(section.getInfo());
             } else if (st.name().equals("ACHIEVEMENT") || st.name().equals("QUALIFICATIONS")) {
@@ -102,9 +102,9 @@ public class ResumeTestData {
                     System.out.println(sls);
                 }
             } else if (st.name().equals("EXPERIENCE") || st.name().equals("EDUCATION")) {
-                List<EduSection> listSection = (List<EduSection>) section.getInfo();
-                for (EduSection sls : listSection) {
-                    System.out.println(sls.getEstablishment() + " (" + sls.getHttp() + ")");
+                List<Experience> listSection = (List<Experience>) section.getInfo();
+                for (Experience sls : listSection) {
+                    System.out.println(sls.getEstablishment() + " (" + sls.getUrl() + ")");
                     System.out.println(sls.getData() + " - " + sls.getDataTo() + ": " + sls.getPosition());
                 }
             }
