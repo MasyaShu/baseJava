@@ -3,14 +3,16 @@ package com.urise.webapp;
 import com.urise.webapp.model.*;
 
 import java.time.YearMonth;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ResumeTestData {
     public static void main(String[] args) {
-        Map<ContactType, String> contacts = new HashMap<>();
+        Resume resume = CreateResume();
+        printResume(resume);
+    }
+
+    static Resume CreateResume() {
+        Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
         for (ContactType c : ContactType.values()) {
             switch (c.name()) {
                 case "TEL":
@@ -65,22 +67,23 @@ public class ResumeTestData {
                 switch (st.name()) {
                     case "EXPERIENCE":
                         List<Experience> experience = new ArrayList<>();
-                        experience.add(new Experience(YearMonth.of(2013, 10), null, "Java Online Projects", "http://javaops.ru/", "Автор проекта. Создание, организация и проведение Java онлайн проектов и стажировок."));
-                        experience.add(new Experience(YearMonth.of(2014, 10), YearMonth.of(2016, 1), "Wrike", "", "Старший разработчик (backend). Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO."));
-                        experience.add(new Experience(YearMonth.of(2012, 4), YearMonth.of(2014, 10), "RIT Center", "", "Java архитектор. Организация процесса разработки системы ERP для разных окружений: релизная политика, версионирование, ведение CI (Jenkins), миграция базы (кастомизация Flyway), конфигурирование системы (pgBoucer, Nginx), AAA via SSO. Архитектура БД и серверной части системы. Разработка интергационных сервисов: CMIS, BPMN2, 1C (WebServices), сервисов общего назначения (почта, экспорт в pdf, doc, html). Интеграция Alfresco JLAN для online редактирование из браузера документов MS Office. Maven + plugin development, Ant, Apache Commons, Spring security, Spring MVC, Tomcat,WSO2, xcmis, OpenCmis, Bonita, Python scripting, Unix shell remote scripting via ssh tunnels, PL/Python"));
+                        List<Experience.Position> position = new ArrayList<>();
+                        position.add(new Experience.Position(YearMonth.of(2014, 10), YearMonth.of(2016, 1), "Автор проекта.", "Создание, организация и проведение Java онлайн проектов и стажировок."));
+                        experience.add(new Experience(new Link("http://javaops.ru/", "Java Online Projects"), position));
                         sections.put(st, new OrganizationSection(experience));
                         break;
                     case "EDUCATION":
                         List<Experience> education = new ArrayList<>();
-                        education.add(new Experience(YearMonth.of(2013, 3), YearMonth.of(2013, 5), "Coursera", "https://www.coursera.org/course/progfun", "Functional Programming Principles in Scala\" by Martin Odersky"));
-                        education.add(new Experience(YearMonth.of(2011, 3), YearMonth.of(2011, 4), "Wrike", "", "Курс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\""));
-                        education.add(new Experience(YearMonth.of(2005, 4), YearMonth.of(2005, 10), "Siemens AG", "", "3 месяца обучения мобильным IN сетям (Берлин)"));
+                        List<Experience.Position> position1 = new ArrayList<>();
+                        position1.add(new Experience.Position(YearMonth.of(2014, 10), YearMonth.of(2016, 1), "Аспирантура (программист С, С++)", ""));
+                        position1.add(new Experience.Position(YearMonth.of(2014, 10), YearMonth.of(2016, 1), "Инженер (программист Fortran, C)", ""));
+                        education.add(new Experience(new Link("http://www.ifmo.ru/", "Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики"), position1));
                         sections.put(st, new OrganizationSection(education));
                 }
             }
         }
         Resume resume = new Resume("Григорий Кислин", contacts, sections);
-        printResume(resume);
+        return resume;
     }
 
     static void printResume(Resume resume) {
@@ -104,8 +107,12 @@ public class ResumeTestData {
             } else if (st.name().equals("EXPERIENCE") || st.name().equals("EDUCATION")) {
                 List<Experience> listSection = (List<Experience>) section.getInfo();
                 for (Experience sls : listSection) {
-                    System.out.println(sls.getEstablishment() + " (" + sls.getUrl() + ")");
-                    System.out.println(sls.getData() + " - " + sls.getDataTo() + ": " + sls.getPosition());
+                    System.out.println(sls.getUrl());
+                    for (Experience.Position poz : sls.getPositions()) {
+                        System.out.println(poz.getData() + " - " + poz.getDataTo() + ": " + poz.getEstablishment());
+                        System.out.println(poz.getPosition());
+                    }
+
                 }
             }
         }
