@@ -10,7 +10,7 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.List;
 
-public class AbstractStorageTest {
+public abstract class AbstractStorageTest {
 
     protected Storage storage;
     private String uuid1 = "1";

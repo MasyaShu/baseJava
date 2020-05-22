@@ -1,7 +1,5 @@
 package com.urise.webapp.model;
 
-import sun.swing.SwingUtilities2;
-
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Objects;
